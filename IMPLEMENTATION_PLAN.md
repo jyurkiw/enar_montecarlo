@@ -181,7 +181,7 @@ def expand_always(branches: dict[str, list], outcomes: list[str]) -> dict[str, l
   - `always` absent entirely — input returned unchanged structurally
 - Function is pure (no I/O, no mutation of input)
 
-### P1.3 Dot-notation path resolver (S)
+### P1.3 Dot-notation path resolver (S) — [x] Done
 
 **Module:** `src/enar_montecarlo/utils/path_resolver.py`
 
