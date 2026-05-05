@@ -160,7 +160,7 @@ Implement `ResolutionEvent`, `EffectEvent`, `RoundCompleteMarker`, `SimulationCo
 - 100% test coverage on `events.py`
 - Tests in `tests/unit/test_events.py`
 
-### P1.2 The "always" branch translator (S)
+### P1.2 The "always" branch translator (S) — [x] Done
 
 **Module:** `src/enar_montecarlo/utils/always_translator.py`
 
