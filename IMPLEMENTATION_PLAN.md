@@ -343,7 +343,7 @@ def close_context(ctx: PersistenceContext, *, success: bool) -> None: ...
 - File deletion behavior covered
 - Postgres-mode test gated behind a `POSTGRES_TEST_URL` env var; skipped when unset
 
-### P2.3 Values table seeding and registration (M)
+### P2.3 Values table seeding and registration (M) — [x] Done
 
 **Module:** `src/enar_montecarlo/persistence/values.py`
 
