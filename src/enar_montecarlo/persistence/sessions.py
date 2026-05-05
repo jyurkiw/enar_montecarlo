@@ -10,9 +10,10 @@ import os
 import tempfile
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 from uuid import UUID
 
-from sqlalchemy import Engine, create_engine, text
+from sqlalchemy import Engine, create_engine, event
 from sqlalchemy.orm import Session
 
 from enar_montecarlo.persistence.schema import Base
@@ -36,9 +37,15 @@ def _default_temp_dir() -> Path:
 def _make_sqlite(path: Path) -> tuple[Engine, Session]:
     path.parent.mkdir(parents=True, exist_ok=True)
     engine = create_engine(f"sqlite:///{path}")
-    # FK enforcement is off on SQLite by default.
-    with engine.connect() as conn:
-        conn.execute(text("PRAGMA foreign_keys=ON"))
+
+    # FK enforcement is off on SQLite by default and is per-connection;
+    # the listener applies it to every connection drawn from the pool.
+    @event.listens_for(engine, "connect")
+    def _enable_fk(dbapi_conn: Any, _conn_record: Any) -> None:
+        cursor = dbapi_conn.cursor()
+        cursor.execute("PRAGMA foreign_keys=ON")
+        cursor.close()
+
     Base.metadata.create_all(engine)
     return engine, Session(engine)
 
