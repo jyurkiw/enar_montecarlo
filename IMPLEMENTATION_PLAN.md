@@ -306,7 +306,7 @@ Reads attributes from a sim module. Raises `ConfigurationError` with a clear mes
 
 **Goal:** A working SQL backend that can be seeded, written to, and synced. SQLite first, Postgres parity verified before phase end.
 
-### P2.1 SQLAlchemy schema (M)
+### P2.1 SQLAlchemy schema (M) — [x] Done
 
 **Module:** `src/enar_montecarlo/persistence/schema.py`
 
