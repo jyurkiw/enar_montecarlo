@@ -104,7 +104,7 @@ Estimated rough sizing in parens after each task is for ordering purposes only.
 
 **Goal:** A clean, installable, testable skeleton with all dependencies resolved.
 
-### P0.1 Initialize repository (S)
+### P0.1 Initialize repository (S) — [x] Done
 
 - Create the repo layout above (empty modules, `__init__.py` files, empty test files).
 - `pyproject.toml` with:
@@ -136,9 +136,9 @@ Estimated rough sizing in parens after each task is for ordering purposes only.
 
 ### P0 phase-end checklist
 
-- [ ] Layout in place
-- [ ] `pip install -e .[dev]` works
-- [ ] `pytest` runs
+- [x] Layout in place
+- [x] `pip install -e .[dev]` works
+- [x] `pytest` runs
 - [ ] `ruff` and `mypy` clean
 
 ---
