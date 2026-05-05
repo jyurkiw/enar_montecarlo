@@ -258,7 +258,7 @@ Validate that `category` is a valid Python identifier; raise `ValueError` if not
 - Invalid category names raise `ValueError`
 - `copy.deepcopy(registry)` works and produces independent state
 
-### P1.7 Lifecycle hook discovery (S)
+### P1.7 Lifecycle hook discovery (S) — [x] Done
 
 **Module:** `src/enar_montecarlo/lifecycle.py`
 
@@ -294,11 +294,11 @@ Reads attributes from a sim module. Raises `ConfigurationError` with a clear mes
 
 ### P1 phase-end checklist
 
-- [ ] All P1 modules exist
-- [ ] All unit tests in `tests/unit/` pass
-- [ ] Coverage on P1 modules ≥ 95%
-- [ ] No mypy errors
-- [ ] No ruff errors
+- [x] All P1 modules exist
+- [x] All unit tests in `tests/unit/` pass
+- [x] Coverage on P1 modules ≥ 95%
+- [x] No mypy errors
+- [x] No ruff errors
 
 ---
 
