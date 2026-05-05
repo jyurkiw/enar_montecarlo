@@ -397,7 +397,7 @@ def update_run_completion(ctx, *, run_id, iterations_completed, terminated_reaso
 
 **Acceptance:** Tests insert and update; verify row contents match.
 
-### P2.6 Event writes (M)
+### P2.6 Event writes (M) — [x] Done
 
 **Module:** `src/enar_montecarlo/persistence/writes.py` (event functions)
 

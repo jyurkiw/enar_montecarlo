@@ -1,17 +1,22 @@
 """Run-row and event writes."""
 
+from collections.abc import Iterable
 from datetime import UTC, datetime
 from typing import Any
 from uuid import UUID
 
 from sqlalchemy import update
 
-from enar_montecarlo.persistence.schema import Run
+from enar_montecarlo.events import EffectEvent, Event, ResolutionEvent
+from enar_montecarlo.persistence.schema import Effect, Resolution, Run
 from enar_montecarlo.persistence.sessions import PersistenceContext
 
 
 def _now_utc_naive() -> datetime:
     return datetime.now(UTC).replace(tzinfo=None)
+
+
+# --- run rows ----------------------------------------------------------------
 
 
 def create_run_row(
@@ -82,4 +87,94 @@ def update_run_completion(
     ctx.sqlite.commit()
     if ctx.postgres is not None:
         ctx.postgres.execute(stmt)
+        ctx.postgres.commit()
+
+
+# --- events ------------------------------------------------------------------
+
+
+def _resolution_row(run_id: UUID, ev: ResolutionEvent) -> Resolution:
+    return Resolution(
+        run_id=run_id,
+        iteration_num=ev.iteration_num,
+        round_num=ev.round_num,
+        event_seq=ev.event_seq,
+        actor_file_id=ev.actor_file_id,
+        actor_index=ev.actor_index,
+        target_file_id=ev.target_file_id,
+        target_index=ev.target_index,
+        resolution_name=ev.resolution_name,
+        outcome_id=ev.outcome_id,
+        caused_by_seq=ev.caused_by_seq,
+        notes=ev.notes,
+    )
+
+
+def _effect_row(run_id: UUID, ev: EffectEvent) -> Effect:
+    return Effect(
+        run_id=run_id,
+        iteration_num=ev.iteration_num,
+        round_num=ev.round_num,
+        event_seq=ev.event_seq,
+        actor_file_id=ev.actor_file_id,
+        actor_index=ev.actor_index,
+        target_file_id=ev.target_file_id,
+        target_index=ev.target_index,
+        effect_definition_name=ev.effect_definition_name,
+        effect_type_id=ev.effect_type_id,
+        damage_type_id=ev.damage_type_id,
+        amount=ev.amount,
+        source_branch_id=ev.source_branch_id,
+        caused_by_seq=ev.caused_by_seq,
+        trigger_name=ev.trigger_name,
+        trigger_result=ev.trigger_result,
+        notes=ev.notes,
+    )
+
+
+def write_event(ctx: PersistenceContext, *, run_id: UUID, event: Event) -> None:
+    """Write a single event. Markers (round_complete / sim_complete) are
+    no-ops at the DB layer (they are progress signals only)."""
+    if isinstance(event, ResolutionEvent):
+        ctx.sqlite.add(_resolution_row(run_id, event))
+        ctx.sqlite.commit()
+        if ctx.postgres is not None:
+            ctx.postgres.add(_resolution_row(run_id, event))
+            ctx.postgres.commit()
+    elif isinstance(event, EffectEvent):
+        ctx.sqlite.add(_effect_row(run_id, event))
+        ctx.sqlite.commit()
+        if ctx.postgres is not None:
+            ctx.postgres.add(_effect_row(run_id, event))
+            ctx.postgres.commit()
+    # Markers are not persisted.
+
+
+def write_events_bulk(
+    ctx: PersistenceContext,
+    *,
+    run_id: UUID,
+    events: Iterable[Event],
+) -> None:
+    """Write a batch of events in a single transaction per backend.
+
+    Markers in ``events`` are skipped silently; if any persisted row
+    violates a constraint, the entire batch rolls back.
+    """
+    sqlite_rows: list[Resolution | Effect] = []
+    pg_rows: list[Resolution | Effect] = []
+    for event in events:
+        if isinstance(event, ResolutionEvent):
+            sqlite_rows.append(_resolution_row(run_id, event))
+            if ctx.postgres is not None:
+                pg_rows.append(_resolution_row(run_id, event))
+        elif isinstance(event, EffectEvent):
+            sqlite_rows.append(_effect_row(run_id, event))
+            if ctx.postgres is not None:
+                pg_rows.append(_effect_row(run_id, event))
+        # Markers ignored.
+    ctx.sqlite.add_all(sqlite_rows)
+    ctx.sqlite.commit()
+    if ctx.postgres is not None:
+        ctx.postgres.add_all(pg_rows)
         ctx.postgres.commit()
