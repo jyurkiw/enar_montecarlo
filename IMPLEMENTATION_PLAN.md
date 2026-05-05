@@ -213,7 +213,7 @@ Use `hashlib.sha256(f"{master_seed}:{iteration_num}".encode()).digest()` truncat
 - Different `(master, iter)` pairs produce different seeds
 - Same `(master, iter)` produces same seed across re-imports
 
-### P1.5 JSONL serialization (S)
+### P1.5 JSONL serialization (S) — [x] Done
 
 **Module:** `src/enar_montecarlo/utils/jsonl.py`
 
