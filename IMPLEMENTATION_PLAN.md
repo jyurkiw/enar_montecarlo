@@ -120,7 +120,7 @@ Estimated rough sizing in parens after each task is for ordering purposes only.
 
 **Acceptance:** `pip install -e .[dev]` succeeds in a fresh venv. `pytest` runs (zero tests, zero failures).
 
-### P0.2 Lint and type-check baseline (S)
+### P0.2 Lint and type-check baseline (S) — [x] Done
 
 - `ruff` config: project's preferred rules (suggest `E`, `F`, `I`, `UP`, `B`, `SIM`).
 - `mypy` config: strict on `src/enar_montecarlo`.
@@ -139,7 +139,7 @@ Estimated rough sizing in parens after each task is for ordering purposes only.
 - [x] Layout in place
 - [x] `pip install -e .[dev]` works
 - [x] `pytest` runs
-- [ ] `ruff` and `mypy` clean
+- [x] `ruff` and `mypy` clean
 
 ---
 
