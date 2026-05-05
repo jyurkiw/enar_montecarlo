@@ -228,7 +228,7 @@ Uses Pydantic's `model_dump_json` + `Event.model_validate_json`.
 - Round-trip test for each event type
 - Loaded event equals original
 
-### P1.6 RegistryBuilder and Registry factory (M)
+### P1.6 RegistryBuilder and Registry factory (M) — [x] Done
 
 **Module:** `src/enar_montecarlo/registry.py`
 
