@@ -128,7 +128,7 @@ Estimated rough sizing in parens after each task is for ordering purposes only.
 
 **Acceptance:** `ruff check src tests` and `mypy src/enar_montecarlo` both clean on the empty skeleton.
 
-### P0.3 CI minimum (S, optional but recommended)
+### P0.3 CI minimum (S, optional but recommended) — [x] Done
 
 - GitHub Actions workflow running `pytest`, `ruff`, `mypy` on push/PR.
 
