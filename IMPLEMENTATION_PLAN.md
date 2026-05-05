@@ -385,7 +385,7 @@ Canonical serialization: `json.dumps(content, sort_keys=True, separators=(',', '
 - Filename mismatch with same content → still one row
 - Test with a 100KB-ish realistic statblock to confirm it stores
 
-### P2.5 Run row writes (S)
+### P2.5 Run row writes (S) — [x] Done
 
 **Module:** `src/enar_montecarlo/persistence/writes.py` (run-row functions)
 
