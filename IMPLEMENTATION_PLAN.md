@@ -367,7 +367,7 @@ Both use `INSERT ... ON CONFLICT (category, value) DO NOTHING; SELECT id` semant
   - SQLite-only mode: IDs are assigned by SQLite's autoincrement
   - Concurrent registrations of same (category, value) end up with the same ID
 
-### P2.4 Actor files storage (S)
+### P2.4 Actor files storage (S) — [x] Done
 
 **Module:** `src/enar_montecarlo/persistence/files.py`
 
