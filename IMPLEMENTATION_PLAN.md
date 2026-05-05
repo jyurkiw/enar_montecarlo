@@ -147,7 +147,7 @@ Estimated rough sizing in parens after each task is for ordering purposes only.
 
 **Goal:** All the pieces that don't touch a database. Pure Python, fully unit-tested. These are the foundation everything else depends on.
 
-### P1.1 Pydantic event models (M)
+### P1.1 Pydantic event models (M) — [x] Done
 
 **Module:** `src/enar_montecarlo/events.py`
 
