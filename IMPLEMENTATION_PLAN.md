@@ -195,7 +195,7 @@ Behavior: navigate `target` by `.`-separated keys. If any key missing and no def
 **Acceptance:**
 - Tests cover: simple `"a.b.c"`, missing key with default, missing key without default raises, single key (`"a"`), empty string raises, non-dict intermediate raises.
 
-### P1.4 Per-iteration seeding (S)
+### P1.4 Per-iteration seeding (S) — [x] Done
 
 **Module:** `src/enar_montecarlo/seeding.py`
 
