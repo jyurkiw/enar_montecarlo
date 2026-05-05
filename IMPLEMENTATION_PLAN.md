@@ -320,7 +320,7 @@ Use SQLAlchemy 2.0 declarative style. Type annotations everywhere.
 - Unique constraint on `values(category, value)`
 - PK on resolutions and effects is `(run_id, iteration_num, event_seq)`
 
-### P2.2 Session management (S)
+### P2.2 Session management (S) — [x] Done
 
 **Module:** `src/enar_montecarlo/persistence/sessions.py`
 
