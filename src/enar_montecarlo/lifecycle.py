@@ -4,12 +4,16 @@ The framework imports a sim module and reads documented attributes off
 it to build a :class:`SimContract`. Required attributes missing on the
 module raise :class:`ConfigurationError` with all missing names in the
 message; optional attributes fall back to documented defaults.
+
+Also defines :class:`RunArgs`, the bundle the CLI assembles from
+argparse output and hands to the driver.
 """
 
 from collections.abc import Callable
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from pathlib import Path
 from types import ModuleType
-from typing import Any
+from typing import Any, Literal
 
 DEFAULT_ITERATIONS = 500
 """Fallback for ``DEFAULT_ITERATIONS`` when the sim does not declare one."""
@@ -17,6 +21,28 @@ DEFAULT_ITERATIONS = 500
 
 class ConfigurationError(Exception):
     """A sim module is missing one or more required attributes."""
+
+
+@dataclass
+class RunArgs:
+    """Argument bundle for a single run invocation.
+
+    Built by the CLI from argparse output (or directly by tests / library
+    callers) and passed to :func:`execute_run`. The CLI catches unknown
+    flags after a ``--`` separator and bundles them into ``extra_args``;
+    they flow through to every lifecycle hook as ``**extra_args``.
+    """
+
+    sim_module: ModuleType
+    attackers_path: Path
+    defenders_path: Path
+    iterations: int
+    seed: int
+    postgres_url: str | None
+    output_dir: Path
+    quiet: bool = False
+    progress_format: Literal["text", "json"] = "text"
+    extra_args: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)

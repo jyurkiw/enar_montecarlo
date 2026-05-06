@@ -451,7 +451,7 @@ Uses SQLAlchemy reflection on SQLite + `INSERT ... ON CONFLICT DO NOTHING` on Po
 
 **Goal:** The function that takes a sim module + arguments and produces a completed run, hitting the persistence layer correctly.
 
-### P3.1 Argument bundle (S)
+### P3.1 Argument bundle (S) — [x] Done
 
 **Module:** `src/enar_montecarlo/lifecycle.py` (extending P1.7)
 
