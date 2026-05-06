@@ -6,14 +6,18 @@ module raise :class:`ConfigurationError` with all missing names in the
 message; optional attributes fall back to documented defaults.
 
 Also defines :class:`RunArgs`, the bundle the CLI assembles from
-argparse output and hands to the driver.
+argparse output and hands to the driver, and :func:`load_data_file`,
+which parses an attacker / defender data file off disk.
 """
 
+import json
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
 from types import ModuleType
 from typing import Any, Literal
+
+import yaml
 
 DEFAULT_ITERATIONS = 500
 """Fallback for ``DEFAULT_ITERATIONS`` when the sim does not declare one."""
@@ -21,6 +25,48 @@ DEFAULT_ITERATIONS = 500
 
 class ConfigurationError(Exception):
     """A sim module is missing one or more required attributes."""
+
+
+class DataFileError(ValueError):
+    """An actor data file failed to parse or has the wrong top-level shape."""
+
+
+def load_data_file(path: Path) -> dict[str, Any]:
+    """Load an attacker or defender data file from disk.
+
+    File format is auto-detected by extension: ``.yaml`` and ``.yml``
+    parse as YAML, ``.json`` as JSON. Anything else raises
+    :class:`DataFileError`.
+
+    The framework only checks two structural invariants -- top level is
+    a dict, and an ``actors`` key is present. Everything else is
+    system-specific and left to the sim to validate.
+    """
+    suffix = path.suffix.lower()
+    text = path.read_text(encoding="utf-8")
+    if suffix in (".yaml", ".yml"):
+        try:
+            data = yaml.safe_load(text)
+        except yaml.YAMLError as exc:
+            raise DataFileError(f"failed to parse YAML in {path}: {exc}") from exc
+    elif suffix == ".json":
+        try:
+            data = json.loads(text)
+        except json.JSONDecodeError as exc:
+            raise DataFileError(f"failed to parse JSON in {path}: {exc}") from exc
+    else:
+        raise DataFileError(
+            f"unknown file extension {suffix!r} for {path} "
+            "(expected .yaml / .yml / .json)"
+        )
+
+    if not isinstance(data, dict):
+        raise DataFileError(
+            f"top level of {path} must be a dict, got {type(data).__name__}"
+        )
+    if "actors" not in data:
+        raise DataFileError(f"{path} missing required 'actors' key")
+    return data
 
 
 @dataclass
