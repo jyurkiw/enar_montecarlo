@@ -524,7 +524,7 @@ If `sim_module` is missing optional hooks (`setup`, `teardown`, `setup_once`, `t
 
 **Acceptance:** Test: a sim module with only `run` and the required constants completes a run successfully.
 
-### P3.5 HaltException pass-through (S)
+### P3.5 HaltException pass-through (S) — [x] Done
 
 The framework imports `HaltException` from `enar_eventchain` (or, until that lib exists, defines a stub locally and adopts the upstream class when ready). Hooks raising `HaltException` are caught at the eventchain level, not the framework. The framework only needs to ensure the exception propagates cleanly through the generator iteration if it escapes (i.e., do not swallow it in the iteration loop).
 
@@ -532,10 +532,10 @@ The framework imports `HaltException` from `enar_eventchain` (or, until that lib
 
 ### P3 phase-end checklist
 
-- [ ] Fixture sim runs end-to-end, produces expected DB rows
-- [ ] Crash recovery path tested
-- [ ] No-op default hooks tested
-- [ ] Per-iteration seed derivation actually used in the driver
+- [x] Fixture sim runs end-to-end, produces expected DB rows
+- [x] Crash recovery path tested
+- [x] No-op default hooks tested
+- [x] Per-iteration seed derivation actually used in the driver
 
 ---
 
