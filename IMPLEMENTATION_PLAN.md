@@ -483,7 +483,7 @@ Reject anything that isn't a top-level dict. Reject if missing `actors` key. (Do
 
 **Acceptance:** Tests cover `.yaml`, `.yml`, `.json`, unknown extension (raise), bad parse (raise with helpful message).
 
-### P3.3 The driver (L)
+### P3.3 The driver (L) — [x] Done
 
 ```python
 def execute_run(args: RunArgs) -> UUID:
