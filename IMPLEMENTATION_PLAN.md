@@ -420,7 +420,7 @@ Wait — confirm with design: markers don't go to DB? Re-reading DESIGN §7.1, m
 - FK references resolve (test fails if `outcome_id` doesn't exist in `values`)
 - Markers do not insert any rows
 
-### P2.7 SQLite → Postgres sync (M)
+### P2.7 SQLite → Postgres sync (M) — [x] Done
 
 **Module:** `src/enar_montecarlo/persistence/sync.py`
 
@@ -439,11 +439,11 @@ Uses SQLAlchemy reflection on SQLite + `INSERT ... ON CONFLICT DO NOTHING` on Po
 
 ### P2 phase-end checklist
 
-- [ ] Schema creates cleanly in SQLite
-- [ ] Schema creates cleanly in Postgres (gated test)
-- [ ] All persistence tests pass in both modes
-- [ ] Value ID alignment verified across backends
-- [ ] No raw SQL strings outside the persistence module
+- [x] Schema creates cleanly in SQLite
+- [x] Schema creates cleanly in Postgres (gated test)
+- [x] All persistence tests pass in both modes
+- [x] Value ID alignment verified across backends
+- [x] No raw SQL strings outside the persistence module
 
 ---
 
