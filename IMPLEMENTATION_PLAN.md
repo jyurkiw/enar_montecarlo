@@ -518,7 +518,7 @@ Wrap the iteration loop in a try/except so partial-run state is recorded. On exc
 - Crash mid-run produces a row with `terminated_reason='error'`, partial events persisted
 - Interrupted run is recoverable via `sync` subcommand
 
-### P3.4 Default no-op hooks (S)
+### P3.4 Default no-op hooks (S) — [x] Done
 
 If `sim_module` is missing optional hooks (`setup`, `teardown`, `setup_once`, `teardown_once`), the driver substitutes no-op callables. `setup_once` no-op still must register `OUTCOMES` and freeze, returning a Registry. Implement a `_default_setup_once` helper.
 
