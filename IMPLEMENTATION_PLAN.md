@@ -472,7 +472,7 @@ class RunArgs:
 
 Built by the CLI from argparse output. Passed into the driver.
 
-### P3.2 File loading (S)
+### P3.2 File loading (S) — [x] Done
 
 ```python
 def load_data_file(path: Path) -> dict:
