@@ -663,7 +663,7 @@ In `mode='quiet'`: no output. `on_event` is a no-op.
 
 **Goal:** A `SKILL.md` file in `skills/run/` that teaches cowork (or any skill-aware agent) how to run a sim.
 
-### P6.1 Run skill content (M)
+### P6.1 Run skill content (M) — [x] Done
 
 **File:** `skills/run/SKILL.md`
 
@@ -685,8 +685,8 @@ Keep it under ~200 lines. Skill-creator best practices: be specific in the descr
 
 ### P6 phase-end checklist
 
-- [ ] SKILL.md exists, follows skill-creator conventions
-- [ ] One sample task documented as reference
+- [x] SKILL.md exists, follows skill-creator conventions
+- [x] One sample task documented as reference
 
 ---
 
