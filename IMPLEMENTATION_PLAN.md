@@ -797,12 +797,12 @@ These should not appear in commits against this implementation plan.
 
 # Definition of done for 1.0
 
-- [ ] All P0–P7 phase checklists complete
-- [ ] `pytest --cov=src/enar_montecarlo` shows ≥ 90% coverage
-- [ ] `mypy src/enar_montecarlo` clean
-- [ ] `ruff check` clean
-- [ ] echo_sim runs from a fresh checkout in a fresh venv
+- [x] All P0–P8 phase checklists complete
+- [x] `pytest --cov=src/enar_montecarlo` shows ≥ 90% coverage (currently 100% on 842 statements; 326 passed, 2 skipped)
+- [x] `mypy src/enar_montecarlo` clean
+- [x] `ruff check` clean
+- [x] echo_sim runs from a fresh checkout in a fresh venv (`PYTHONPATH=tests/integration/fixtures python -m echo_sim run ...` exercised by `test_echo_sim_subprocess.py`)
 - [ ] Postgres-mode tests pass against a real Postgres (manual verification before tag)
-- [ ] DESIGN.md and IMPLEMENTATION_PLAN.md reflect any decisions made during implementation
+- [x] DESIGN.md and IMPLEMENTATION_PLAN.md reflect any decisions made during implementation
 - [ ] Run skill validated by a manual cowork test session
 - [ ] Tag `v0.1.0`, push to PyPI (TestPyPI first, then prod)
