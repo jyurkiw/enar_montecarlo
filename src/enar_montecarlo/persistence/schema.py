@@ -153,9 +153,17 @@ class Effect(Base):
 #
 # UNION ALL of resolutions and effects for chronological replay
 # (DESIGN section 7.3). Created as raw SQL after the tables exist.
+#
+# ``CREATE VIEW IF NOT EXISTS`` is SQLite-only -- Postgres does not
+# support that clause. ``CREATE OR REPLACE VIEW`` is Postgres-only.
+# The drop-then-create pair below works identically on both backends:
+# DROP IF EXISTS is supported in both, and a fresh CREATE always
+# succeeds because we just dropped any prior definition.
 
-V_EVENTS_DDL = """\
-CREATE VIEW IF NOT EXISTS v_events AS
+V_EVENTS_DROP = "DROP VIEW IF EXISTS v_events;"
+
+V_EVENTS_CREATE = """\
+CREATE VIEW v_events AS
   SELECT run_id, iteration_num, round_num, event_seq,
          'resolution' AS kind,
          resolution_name AS name,

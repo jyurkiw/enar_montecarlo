@@ -16,7 +16,11 @@ from uuid import UUID
 from sqlalchemy import Engine, create_engine, event, text
 from sqlalchemy.orm import Session
 
-from enar_montecarlo.persistence.schema import V_EVENTS_DDL, Base
+from enar_montecarlo.persistence.schema import (
+    V_EVENTS_CREATE,
+    V_EVENTS_DROP,
+    Base,
+)
 
 
 @dataclass
@@ -59,9 +63,15 @@ def _make_remote(url: str) -> tuple[Engine, Session]:
 
 
 def _ensure_v_events_view(engine: Engine) -> None:
-    """Create the v_events view if absent. Idempotent across re-runs."""
+    """(Re)create the v_events view. Idempotent across re-runs.
+
+    Drop-then-create rather than ``CREATE VIEW IF NOT EXISTS`` (SQLite-only)
+    or ``CREATE OR REPLACE VIEW`` (Postgres-only); the pair below works
+    on both backends without dialect dispatch.
+    """
     with engine.begin() as conn:
-        conn.execute(text(V_EVENTS_DDL))
+        conn.execute(text(V_EVENTS_DROP))
+        conn.execute(text(V_EVENTS_CREATE))
 
 
 def create_context(
