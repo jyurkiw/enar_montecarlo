@@ -571,7 +571,7 @@ Calls `sim.template()` if present, else default skeleton. Format flag for yaml/j
 
 **Acceptance:** Default invocation prints YAML to stdout. `--format json` prints JSON. `--output path` writes to file.
 
-### P4.4 `validate` subcommand (S)
+### P4.4 `validate` subcommand (S) — [x] Done
 
 **Module:** `src/enar_montecarlo/cli/commands/validate.py`
 
