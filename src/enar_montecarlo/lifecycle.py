@@ -20,6 +20,7 @@ from uuid import UUID, uuid4
 
 import yaml
 
+from enar_montecarlo.cli.progress import ProgressDriver
 from enar_montecarlo.events import Event
 from enar_montecarlo.persistence.files import store_file
 from enar_montecarlo.persistence.sessions import close_context, create_context
@@ -299,35 +300,46 @@ def execute_run(args: RunArgs) -> UUID:
             **args.extra_args,
         )
 
-        for iteration_num in range(args.iterations):
-            # Per-iteration seed is computed for reproducibility; sims
-            # that need it derive the same value via
-            # derive_iteration_seed(args.seed, iteration_num).
-            derive_iteration_seed(args.seed, iteration_num)
-            setup(
-                registry=registry,
-                iteration_num=iteration_num,
-                **args.extra_args,
-            )
-            try:
-                events: Iterable[Event] = contract.run(
-                    attackers=attackers,
-                    defenders=defenders,
-                    registry=registry,
-                    iteration_num=iteration_num,
-                    **args.extra_args,
-                )
-                for event in events:
-                    write_event(ctx, run_id=run_id, event=event)
-            finally:
-                teardown(
-                    registry=registry,
-                    iteration_num=iteration_num,
-                    **args.extra_args,
-                )
-            iterations_completed += 1
+        progress_mode = "quiet" if args.quiet else args.progress_format
+        progress = ProgressDriver(
+            total_iterations=args.iterations,
+            max_rounds=contract.max_rounds,
+            mode=progress_mode,
+        )
 
-        teardown_once(registry=registry, **args.extra_args)
+        try:
+            for iteration_num in range(args.iterations):
+                # Per-iteration seed is computed for reproducibility;
+                # sims that need it derive the same value via
+                # derive_iteration_seed(args.seed, iteration_num).
+                derive_iteration_seed(args.seed, iteration_num)
+                setup(
+                    registry=registry,
+                    iteration_num=iteration_num,
+                    **args.extra_args,
+                )
+                try:
+                    events: Iterable[Event] = contract.run(
+                        attackers=attackers,
+                        defenders=defenders,
+                        registry=registry,
+                        iteration_num=iteration_num,
+                        **args.extra_args,
+                    )
+                    for event in events:
+                        write_event(ctx, run_id=run_id, event=event)
+                        progress.on_event(event)
+                finally:
+                    teardown(
+                        registry=registry,
+                        iteration_num=iteration_num,
+                        **args.extra_args,
+                    )
+                iterations_completed += 1
+
+            teardown_once(registry=registry, **args.extra_args)
+        finally:
+            progress.close()
 
         terminated_reason = "success"
         success = True

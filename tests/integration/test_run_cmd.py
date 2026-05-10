@@ -17,6 +17,17 @@ from enar_montecarlo.events import Event, RoundCompleteMarker
 from enar_montecarlo.persistence.schema import Run
 
 
+def _last_line_uuid(output: str) -> UUID:
+    """Extract the run UUID from the last line of CliRunner output.
+
+    click 8.3+'s CliRunner.result.output contains stderr + stdout
+    interleaved (real-user stdout/stderr separation still holds in
+    actual terminal usage). The UUID is always the last thing
+    written to stdout, so taking the last non-empty line is robust.
+    """
+    return UUID(output.strip().splitlines()[-1])
+
+
 def _minimal_sim() -> types.ModuleType:
     def run_fn(*, iteration_num: int, **_: Any) -> Iterator[Event]:
         yield RoundCompleteMarker(event_seq=1, iteration_num=iteration_num, round_num=1)
@@ -97,9 +108,10 @@ def test_run_prints_uuid_and_creates_sqlite(tmp_path: Path) -> None:
         ],
     )
     assert result.exit_code == 0, result.output
-    # stdout contract: a single line with the UUID and nothing else.
-    line = result.output.strip()
-    parsed_uuid = UUID(line)  # raises if not a valid UUID
+    # stdout contract: the UUID is the LAST thing written (progress UI
+    # writes to stderr, which CliRunner.result.output interleaves but
+    # real users see on a separate FD).
+    parsed_uuid = _last_line_uuid(result.output)
     assert (out_dir / f"{parsed_uuid}.db").exists()
 
 
@@ -124,7 +136,7 @@ def test_run_records_iterations_and_seed(tmp_path: Path) -> None:
         ],
     )
     assert result.exit_code == 0
-    run_id = UUID(result.output.strip())
+    run_id = _last_line_uuid(result.output)
 
     eng = create_engine(f"sqlite:///{out_dir / f'{run_id}.db'}")
     with Session(eng) as sess:
@@ -145,7 +157,7 @@ def test_run_default_iterations_uses_sim_constant(tmp_path: Path) -> None:
         cli, ["run", str(a), str(d), "--seed", "1", "--output-dir", str(out_dir)]
     )
     assert result.exit_code == 0
-    run_id = UUID(result.output.strip())
+    run_id = _last_line_uuid(result.output)
 
     eng = create_engine(f"sqlite:///{out_dir / f'{run_id}.db'}")
     with Session(eng) as sess:
@@ -165,7 +177,7 @@ def test_run_default_seed_is_clock_derived(tmp_path: Path) -> None:
         cli, ["run", str(a), str(d), "--iterations", "1", "--output-dir", str(out_dir)]
     )
     assert result.exit_code == 0
-    run_id = UUID(result.output.strip())
+    run_id = _last_line_uuid(result.output)
 
     eng = create_engine(f"sqlite:///{out_dir / f'{run_id}.db'}")
     with Session(eng) as sess:
@@ -202,7 +214,7 @@ def test_run_seed_determinism_produces_same_outcome(tmp_path: Path) -> None:
             ],
         )
         assert result.exit_code == 0
-        return UUID(result.output.strip())
+        return _last_line_uuid(result.output)
 
     run_a = _run()
     run_b = _run()
@@ -242,7 +254,7 @@ def test_run_quiet_does_not_change_stdout(tmp_path: Path) -> None:
     )
     assert result.exit_code == 0
     # Still the UUID on stdout. (Progress UI is P5.)
-    UUID(result.output.strip())
+    _last_line_uuid(result.output)
 
 
 def test_run_unknown_args_pass_through_to_sim(tmp_path: Path) -> None:
@@ -327,7 +339,7 @@ def test_run_postgres_mode_syncs(tmp_path: Path, monkeypatch: pytest.MonkeyPatch
         ],
     )
     assert result.exit_code == 0, result.output
-    run_id = UUID(result.output.strip())
+    run_id = _last_line_uuid(result.output)
     # Temp SQLite was deleted on success.
     assert not (tmp_path / f"{run_id}.db").exists()
     # Run row exists in the "remote".

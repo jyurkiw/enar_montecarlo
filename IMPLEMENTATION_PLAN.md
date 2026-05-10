@@ -624,7 +624,7 @@ Queries `runs` table. Prints a tabular summary (rich Table is fine).
 
 **Goal:** Two Rich progress bars driven off marker events. JSON Lines mode for cowork.
 
-### P5.1 Rich text mode (M)
+### P5.1 Rich text mode (M) — [x] Done
 
 **Module:** `src/enar_montecarlo/cli/progress.py`
 
