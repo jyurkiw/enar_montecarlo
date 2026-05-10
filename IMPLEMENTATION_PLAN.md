@@ -587,7 +587,7 @@ Prints sim metadata. `--json` flag.
 
 **Acceptance:** Output matches DESIGN §10.4 format.
 
-### P4.6 `sync` subcommand (S)
+### P4.6 `sync` subcommand (S) — [x] Done
 
 **Module:** `src/enar_montecarlo/cli/commands/sync.py`
 
