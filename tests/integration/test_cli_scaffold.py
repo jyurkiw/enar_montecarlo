@@ -17,6 +17,14 @@ def test_main_is_re_exported_from_package() -> None:
     assert exported_main is canonical
 
 
+def test_dunder_main_module_importable() -> None:
+    """``python -m enar_montecarlo`` works because __main__ imports main."""
+    import enar_montecarlo.__main__ as dunder_main
+    from enar_montecarlo.cli.main import main as canonical
+
+    assert dunder_main.main is canonical
+
+
 def test_help_lists_all_subcommands() -> None:
     cli = _build_cli(sim_module=None)
     runner = CliRunner()
@@ -36,18 +44,6 @@ def test_subcommand_help_works(subcommand: str) -> None:
     result = runner.invoke(cli, [subcommand, "--help"])
     assert result.exit_code == 0
     assert "--help" in result.output
-
-
-@pytest.mark.parametrize(
-    "subcommand",
-    ["run", "template", "validate", "info", "sync", "purge", "list-runs"],
-)
-def test_subcommand_stub_errors_with_marker(subcommand: str) -> None:
-    cli = _build_cli(sim_module=None)
-    runner = CliRunner()
-    result = runner.invoke(cli, [subcommand])
-    assert result.exit_code != 0
-    assert "not implemented yet" in result.output
 
 
 def test_sim_module_threaded_through_context() -> None:

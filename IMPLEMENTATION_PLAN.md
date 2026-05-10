@@ -603,7 +603,7 @@ Deletes `/tmp/<run_id>.db` if present. Confirmation prompt unless `--yes`.
 
 **Acceptance:** File removed; missing file is a no-op with informative message.
 
-### P4.8 `list-runs` subcommand (S)
+### P4.8 `list-runs` subcommand (S) — [x] Done
 
 **Module:** `src/enar_montecarlo/cli/commands/list_runs.py`
 
@@ -613,10 +613,10 @@ Queries `runs` table. Prints a tabular summary (rich Table is fine).
 
 ### P4 phase-end checklist
 
-- [ ] All subcommands implemented
-- [ ] CLI integration tests cover happy paths
-- [ ] `python -m fixture_sim <subcommand> --help` works for all
-- [ ] stdout contract enforced: `run` outputs only the UUID on success
+- [x] All subcommands implemented
+- [x] CLI integration tests cover happy paths
+- [x] `python -m fixture_sim <subcommand> --help` works for all
+- [x] stdout contract enforced: `run` outputs only the UUID on success
 
 ---
 

@@ -45,7 +45,6 @@ def validate_cmd(ctx: click.Context, file: Path) -> None:
     except DataFileError as exc:
         click.echo(str(exc), err=True)
         ctx.exit(1)
-        return  # for type checkers; ctx.exit raises
 
     issues.extend(_framework_checks(data))
 
