@@ -13,10 +13,10 @@ from pathlib import Path
 from typing import Any
 from uuid import UUID
 
-from sqlalchemy import Engine, create_engine, event
+from sqlalchemy import Engine, create_engine, event, text
 from sqlalchemy.orm import Session
 
-from enar_montecarlo.persistence.schema import Base
+from enar_montecarlo.persistence.schema import V_EVENTS_DDL, Base
 
 
 @dataclass
@@ -47,13 +47,21 @@ def _make_sqlite(path: Path) -> tuple[Engine, Session]:
         cursor.close()
 
     Base.metadata.create_all(engine)
+    _ensure_v_events_view(engine)
     return engine, Session(engine)
 
 
 def _make_remote(url: str) -> tuple[Engine, Session]:
     engine = create_engine(url)
     Base.metadata.create_all(engine)
+    _ensure_v_events_view(engine)
     return engine, Session(engine)
+
+
+def _ensure_v_events_view(engine: Engine) -> None:
+    """Create the v_events view if absent. Idempotent across re-runs."""
+    with engine.begin() as conn:
+        conn.execute(text(V_EVENTS_DDL))
 
 
 def create_context(

@@ -13,8 +13,14 @@ from enar_montecarlo.persistence.schema import ActorFile
 from enar_montecarlo.persistence.sessions import PersistenceContext
 
 
-def _canonical_sha256(content: dict[str, Any]) -> str:
-    """SHA-256 of canonical-JSON-serialized content (sorted keys, tight separators)."""
+def canonical_sha256(content: dict[str, Any]) -> str:
+    """SHA-256 of canonical-JSON-serialized content (sorted keys, tight separators).
+
+    Public so sims can derive the same ``actor_file_id`` value the
+    framework will assign during ``store_file``, allowing sim hooks to
+    emit events with FK-valid ``actor_file_id`` references without the
+    framework having to thread the SHAs through hook signatures.
+    """
     canonical = json.dumps(content, sort_keys=True, separators=(",", ":"))
     return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
 
@@ -56,7 +62,7 @@ def store_file(
     The first filename ingested for a given content wins; subsequent
     re-ingestions under different filenames are no-ops at the DB layer.
     """
-    sha = _canonical_sha256(content)
+    sha = canonical_sha256(content)
     if ctx.postgres is not None:
         ctx.postgres.execute(_upsert_stmt(ctx.postgres, sha, original_filename, content))
         ctx.postgres.commit()

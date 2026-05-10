@@ -1,0 +1,7 @@
+metadata:
+  system: echo_system
+  system_version: "0.1.0"
+actors:
+  - name: echo_defender
+    count: 1
+    clumping: 1

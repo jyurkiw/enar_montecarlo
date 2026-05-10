@@ -694,7 +694,7 @@ Keep it under ~200 lines. Skill-creator best practices: be specific in the descr
 
 **Goal:** A fixture sim that exercises every code path, plus the post-run smoke test enforced in CI.
 
-### P7.1 Fixture echo_sim (M)
+### P7.1 Fixture echo_sim (M) — [x] Done
 
 **Path:** `tests/integration/fixtures/echo_sim/`
 
