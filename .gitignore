@@ -24,6 +24,10 @@ env/
 venv/
 .venv/
 
+# uv lockfile -- the project uses pip/hatchling, not uv. uv.lock
+# is generated incidentally if a developer runs uv against the repo.
+uv.lock
+
 # Test / coverage
 .pytest_cache/
 .coverage
