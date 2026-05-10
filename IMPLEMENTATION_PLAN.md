@@ -639,7 +639,7 @@ In text mode: Rich `Progress` group with two bars (iterations + rounds). Iterati
 
 **Acceptance:** Manual smoke test confirms bars update sensibly. Automated test: stub Rich's `Progress` and assert update calls.
 
-### P5.2 JSON Lines mode (S)
+### P5.2 JSON Lines mode (S) — [x] Done
 
 In `mode='json'`: emit JSONL to stderr per `DESIGN §11.3`. One line per `iteration_complete` and one final `sim_complete`.
 
