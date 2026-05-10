@@ -769,15 +769,15 @@ Top-level README with:
 
 Walk through each phase's notes file (created during P0) and consolidate any open questions or design notes that should propagate back into DESIGN.md.
 
-### P8.4 DESIGN.md __main__.py recipe correction (S)
+### P8.4 DESIGN.md __main__.py recipe correction (S) — [x] Done
 
 `DESIGN §4.5` shows the canonical sim package wiring as just `if __name__ == "__main__": main()` inside `__init__.py`. That works for `python script.py` but not `python -m my_sim` on Python 3.13+, which requires a separate `__main__.py` submodule. Update the section to show the working recipe (a `__main__.py` that imports the package and calls `main(sim_module=<package>)` explicitly) and reference `tests/integration/fixtures/echo_sim/__main__.py` as the worked example.
 
 ### P8 phase-end checklist
 
-- [ ] README accurate and current
-- [ ] Open items from §15 of DESIGN.md re-checked
-- [ ] DESIGN §4.5 reflects the actual `python -m my_sim` requirement
+- [x] README accurate and current
+- [x] Open items from §15 of DESIGN.md re-checked
+- [x] DESIGN §4.5 reflects the actual `python -m my_sim` requirement
 
 ---
 

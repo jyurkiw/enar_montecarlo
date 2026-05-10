@@ -152,7 +152,8 @@ my_sim/
 ├── README.md
 ├── src/
 │   └── my_sim/
-│       ├── __init__.py        # Required attributes + entry-point glue
+│       ├── __init__.py        # Required attributes + hook re-exports
+│       ├── __main__.py        # `python -m my_sim` entry point
 │       ├── simulation.py      # run() and per-iteration logic
 │       ├── chain.py           # EventChain construction
 │       └── hooks.py           # Hook implementations
@@ -161,10 +162,9 @@ my_sim/
     └── test_simulation.py
 ```
 
-`__init__.py` mostly does re-exports and the CLI entry-point:
+`__init__.py` does re-exports of the required attributes and lifecycle hooks:
 
 ```python
-from enar_montecarlo import main
 from .simulation import run, setup, teardown, setup_once, teardown_once
 from enar_dnd5e_2024 import OUTCOMES
 
@@ -174,12 +174,21 @@ SYSTEM_NAME = "dnd5e_2024"
 SYSTEM_VERSION = "0.1.0"
 DEFAULT_ITERATIONS = 500
 MAX_ROUNDS = 5
-
-if __name__ == "__main__":
-    main()
 ```
 
-`main()` is the framework's CLI entry point. It introspects the calling module to find the lifecycle hooks and constants. `python -m my_sim run a.yaml d.yaml` runs the sim.
+`__main__.py` is the `python -m my_sim` entry point. Python 3.13+ requires a real `__main__` submodule for `python -m <pkg>`; the `if __name__ == "__main__"` trick inside `__init__.py` is **not** sufficient. `__main__.py` imports the package and passes it explicitly so `main()` finds the sim attributes regardless of how the CLI was invoked:
+
+```python
+import my_sim
+from enar_montecarlo import main
+
+if __name__ == "__main__":
+    main(sim_module=my_sim)
+```
+
+A worked example lives at `tests/integration/fixtures/echo_sim/__main__.py`.
+
+`main()` is the framework's CLI entry point. With an explicit `sim_module` argument it uses that; otherwise it falls back to `sys.modules['__main__']` (which works for ad-hoc `python script.py` invocations but not `python -m`). `python -m my_sim run a.yaml d.yaml` runs the sim.
 
 ## 5. Data File Format
 
