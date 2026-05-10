@@ -761,7 +761,7 @@ Top-level README with:
 - Pointer to DESIGN.md and IMPLEMENTATION_PLAN.md
 - License (TBD)
 
-### P8.2 Contributor guide (S, optional)
+### P8.2 Contributor guide (S, optional) — [x] Done
 
 `CONTRIBUTING.md` with the working agreement from the top of this doc.
 
