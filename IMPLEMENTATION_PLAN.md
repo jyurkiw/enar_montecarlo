@@ -595,7 +595,7 @@ Takes `<run_id>` + `--postgres-url`. Calls `sync_to_postgres` against `/tmp/<run
 
 **Acceptance:** Test with a deliberately orphaned SQLite file → sync → file deleted, Postgres has rows.
 
-### P4.7 `purge` subcommand (S)
+### P4.7 `purge` subcommand (S) — [x] Done
 
 **Module:** `src/enar_montecarlo/cli/commands/purge.py`
 
