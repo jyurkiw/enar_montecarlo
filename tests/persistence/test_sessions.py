@@ -7,7 +7,6 @@ logic depends only on whether postgres_url is None, not on the
 specific dialect.
 """
 
-import os
 import tempfile
 from pathlib import Path
 from uuid import uuid4
@@ -136,15 +135,14 @@ def test_temp_mode_close_when_file_missing_is_noop(
 
 
 # --- Real Postgres (gated) --------------------------------------------------
+#
+# The ``postgres_url`` fixture (in conftest.py) skips when
+# POSTGRES_TEST_URL is unset, creates the named DB if it does not
+# exist, and drops it after the test.
 
 
-@pytest.mark.skipif(
-    "POSTGRES_TEST_URL" not in os.environ,
-    reason="POSTGRES_TEST_URL not set",
-)
-def test_real_postgres_round_trip(tmp_path: Path) -> None:
-    pg_url = os.environ["POSTGRES_TEST_URL"]
-    ctx = create_context(run_id=uuid4(), postgres_url=pg_url, output_dir=tmp_path)
+def test_real_postgres_round_trip(tmp_path: Path, postgres_url: str) -> None:
+    ctx = create_context(run_id=uuid4(), postgres_url=postgres_url, output_dir=tmp_path)
     try:
         assert ctx.postgres is not None
         ctx.postgres.execute(select(Value))  # smoke

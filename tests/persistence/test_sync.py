@@ -6,11 +6,9 @@ sqlite:// destination, which runs the same on-conflict and ordering
 machinery without requiring a live Postgres.
 """
 
-import os
 from pathlib import Path
 from uuid import UUID, uuid4
 
-import pytest
 from sqlalchemy import Engine, create_engine, select
 from sqlalchemy.orm import Session
 
@@ -269,17 +267,17 @@ def test_bulk_upsert_stmt_postgres_branch() -> None:
 
 
 # --- real Postgres (gated) --------------------------------------------------
+#
+# The ``postgres_url`` fixture (in conftest.py) skips when
+# POSTGRES_TEST_URL is unset, creates the named DB if it does not
+# exist, and drops it after the test.
 
 
-@pytest.mark.skipif(
-    "POSTGRES_TEST_URL" not in os.environ,
-    reason="POSTGRES_TEST_URL not set",
-)
-def test_real_postgres_round_trip(tmp_path: Path) -> None:
+def test_real_postgres_round_trip(tmp_path: Path, postgres_url: str) -> None:
     src_path, run_id, _, _ = _build_populated_sqlite(tmp_path)
-    sync_to_postgres(sqlite_path=src_path, postgres_url=os.environ["POSTGRES_TEST_URL"])
+    sync_to_postgres(sqlite_path=src_path, postgres_url=postgres_url)
     # Smoke check via a fresh connection.
-    eng, sess = _open_dst(os.environ["POSTGRES_TEST_URL"])
+    eng, sess = _open_dst(postgres_url)
     try:
         run = sess.execute(select(Run).where(Run.run_id == run_id)).scalar_one()
         assert run.iterations_completed == 1
