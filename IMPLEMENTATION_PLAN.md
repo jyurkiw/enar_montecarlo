@@ -765,7 +765,7 @@ Top-level README with:
 
 `CONTRIBUTING.md` with the working agreement from the top of this doc.
 
-### P8.3 Phase READMEs sweep (S)
+### P8.3 Phase READMEs sweep (S) — [x] Done
 
 Walk through each phase's notes file (created during P0) and consolidate any open questions or design notes that should propagate back into DESIGN.md.
 

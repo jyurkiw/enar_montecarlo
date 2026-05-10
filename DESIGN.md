@@ -910,10 +910,10 @@ After every `run` invocation (in test mode), open the resulting SQLite and verif
 
 ## 15. Open Items
 
-These are not blocking for implementation but should be revisited before 1.0:
+Resolution status as of v0.1.0:
 
-1. Per-iteration seed function — sketch is `hash(seed, iter_num)`, concrete implementation pending. Must be stable across Python sessions and deterministic.
-2. JSON Lines progress format — schema is approximate; firm up before cowork integration tests.
-3. The `validate` subcommand contract for the `ValidationIssue` shape — define a Pydantic model so sim authors have a stable target.
-4. Whether the `template` subcommand emits a single combined file or two (attacker / defender). Currently spec'd as one (since data files are symmetric); confirm this matches the data-file conventions when the first sim ships.
-5. EventChain library API shape (separate doc, in `enar_eventchain` repo).
+1. **Per-iteration seed function — RESOLVED.** Implemented in `src/enar_montecarlo/seeding.py` as `derive_iteration_seed(master_seed, iteration_num)` returning `int.from_bytes(sha256(f"{master}:{iter}".encode()).digest()[:8], "big")`. Stable across processes / sessions / OS; result fits in `u64` so non-Python RNG backends can consume it. The constant `derive_iteration_seed(12345, 47) == 10769382246859689114` is locked in by a regression test; changing the formula invalidates reproducibility for every historical `runs.seed`.
+2. **JSON Lines progress format — RESOLVED.** Wire format documented inline in `src/enar_montecarlo/cli/progress.py` and pinned by `tests/integration/test_progress_json.py`: one `{"event": "iteration_complete", "iteration_num": ..., "rounds": ..., "elapsed_s": ...}` line per `SimulationCompleteMarker`, plus a final `{"event": "sim_complete", "total_iterations": ..., "total_rounds": ..., "elapsed_s": ...}` summary. Round / resolution / effect events emit no lines.
+3. **`validate` subcommand `ValidationIssue` shape — DEFERRED.** v0.1 sim hooks return `list[str]`; the CLI joins them one-per-stderr-line. A typed `ValidationIssue` Pydantic model is a candidate for v0.2 once a real sim's `validate()` shows what structure is actually needed (severity? location? code?).
+4. **`template` single vs. two files — CONFIRMED single.** The CLI's `template` subcommand emits one file (matching the data-file symmetry — the same file can serve as either attackers or defenders). Sims that want two distinct templates can override `template()` to return a tuple and wrap their own CLI entry point.
+5. **EventChain library API shape — STILL OPEN.** Lives in the `enar_eventchain` repo (not yet bootstrapped). The framework imports `HaltException` via `enar_montecarlo.halt` (a local stub); when eventchain ships, that module re-exports the upstream class.
