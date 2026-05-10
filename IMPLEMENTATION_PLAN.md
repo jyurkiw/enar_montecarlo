@@ -645,7 +645,7 @@ In `mode='json'`: emit JSONL to stderr per `DESIGN §11.3`. One line per `iterat
 
 **Acceptance:** Test captures stderr, parses JSONL, asserts one line per iteration plus final summary.
 
-### P5.3 Quiet mode (S)
+### P5.3 Quiet mode (S) — [x] Done
 
 In `mode='quiet'`: no output. `on_event` is a no-op.
 
@@ -653,9 +653,9 @@ In `mode='quiet'`: no output. `on_event` is a no-op.
 
 ### P5 phase-end checklist
 
-- [ ] Three modes work (text / json / quiet)
-- [ ] Progress driver consumes markers without altering main event flow
-- [ ] No deadlocks when iterations are very fast
+- [x] Three modes work (text / json / quiet)
+- [x] Progress driver consumes markers without altering main event flow
+- [x] No deadlocks when iterations are very fast
 
 ---
 
