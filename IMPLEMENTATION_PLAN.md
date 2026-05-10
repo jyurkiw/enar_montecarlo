@@ -579,7 +579,7 @@ Loads file, runs framework checks, then sim's `validate` if present. Exit 0 / 1.
 
 **Acceptance:** Tests cover valid file, broken yaml, missing actors key, sim-defined validation issues.
 
-### P4.5 `info` subcommand (S)
+### P4.5 `info` subcommand (S) — [x] Done
 
 **Module:** `src/enar_montecarlo/cli/commands/info.py`
 
