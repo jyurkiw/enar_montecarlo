@@ -1,5 +1,12 @@
 """echo_sim -- the canonical fixture sim for integration tests.
 
+Also a runnable sim per the framework contract: ``python -m echo_sim
+run a.yaml d.yaml`` works when the fixtures dir is on sys.path
+(e.g., ``PYTHONPATH=tests/integration/fixtures``). The CLI wiring at
+the end of this module is the same boilerplate every real sim package
+will use.
+
+
 Per DESIGN's contract a sim is a Python package whose ``__init__.py``
 exports the required attributes plus optional hooks. This fixture
 exercises every event type, every effect_type value, branch and
@@ -26,6 +33,7 @@ not persist):
 from collections.abc import Iterator
 from typing import Any
 
+from enar_montecarlo import main
 from enar_montecarlo.events import (
     EffectEvent,
     Event,
@@ -225,3 +233,10 @@ def run(
     yield SimulationCompleteMarker(
         event_seq=8, iteration_num=iteration_num, rounds_executed=1
     )
+
+
+# CLI entry point. With ``__name__ == "__main__"`` (i.e. via
+# ``python -m echo_sim``) the framework introspects this module as
+# the sim and dispatches the requested subcommand.
+if __name__ == "__main__":  # pragma: no cover
+    main()

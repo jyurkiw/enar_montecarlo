@@ -726,7 +726,7 @@ Runs `execute_run(args)` on `echo_sim` with 5 iterations against in-memory SQLit
 - `notes` column on the custom effect contains expected payload
 - All FK references resolve
 
-### P7.3 Smoke test (S)
+### P7.3 Smoke test (S) — [x] Done
 
 **File:** `tests/smoke/test_post_run_db.py`
 
@@ -741,9 +741,9 @@ Imported into integration tests as a helper.
 
 ### P7 phase-end checklist
 
-- [ ] echo_sim is real and runnable as `python -m echo_sim run a.yaml d.yaml`
-- [ ] End-to-end test green
-- [ ] Smoke checks pass on every integration run
+- [x] echo_sim is real and runnable as `python -m echo_sim run a.yaml d.yaml`
+- [x] End-to-end test green
+- [x] Smoke checks pass on every integration run
 
 ---
 

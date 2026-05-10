@@ -29,6 +29,9 @@ from enar_montecarlo.persistence.schema import (  # noqa: E402
     Run,
     Value,
 )
+from tests.smoke.test_post_run_db import (  # noqa: E402
+    assert_post_run_invariants,
+)
 
 
 @pytest.fixture
@@ -261,6 +264,14 @@ def test_sneaky_flag_via_extra_args_fires_trigger(tmp_path: Path) -> None:
 
 
 # --- exact event_seq layout per iteration ----------------------------------
+
+
+def test_smoke_invariants_pass_on_e2e_run(
+    run_id_and_db: tuple[UUID, Path],
+) -> None:
+    """The post-run smoke helper must pass on every successful e2e run."""
+    run_id, db_path = run_id_and_db
+    assert_post_run_invariants(db_path, run_id)
 
 
 def test_event_seq_layout_per_iteration(run_id_and_db: tuple[UUID, Path]) -> None:
