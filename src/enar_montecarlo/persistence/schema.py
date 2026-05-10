@@ -147,3 +147,24 @@ class Effect(Base):
     trigger_name: Mapped[str | None] = mapped_column(String, nullable=True)
     trigger_result: Mapped[bool | None] = mapped_column(nullable=True)
     notes: Mapped[dict[str, Any]] = mapped_column(JSON, nullable=False, default=dict)
+
+
+# --- v_events view ----------------------------------------------------------
+#
+# UNION ALL of resolutions and effects for chronological replay
+# (DESIGN section 7.3). Created as raw SQL after the tables exist.
+
+V_EVENTS_DDL = """\
+CREATE VIEW IF NOT EXISTS v_events AS
+  SELECT run_id, iteration_num, round_num, event_seq,
+         'resolution' AS kind,
+         resolution_name AS name,
+         caused_by_seq
+    FROM resolutions
+  UNION ALL
+  SELECT run_id, iteration_num, round_num, event_seq,
+         'effect',
+         effect_definition_name,
+         caused_by_seq
+    FROM effects;
+"""
