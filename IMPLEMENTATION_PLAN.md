@@ -802,7 +802,7 @@ These should not appear in commits against this implementation plan.
 - [x] `mypy src/enar_montecarlo` clean
 - [x] `ruff check` clean
 - [x] echo_sim runs from a fresh checkout in a fresh venv (`PYTHONPATH=tests/integration/fixtures python -m echo_sim run ...` exercised by `test_echo_sim_subprocess.py`)
-- [ ] Postgres-mode tests pass against a real Postgres (manual verification before tag)
+- [x] Postgres-mode tests pass against a real Postgres (manual verification before tag)
 - [x] DESIGN.md and IMPLEMENTATION_PLAN.md reflect any decisions made during implementation
 - [ ] Run skill validated by a manual cowork test session
 - [ ] Tag `v0.1.0`, push to PyPI (TestPyPI first, then prod)
