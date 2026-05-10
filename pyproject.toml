@@ -17,7 +17,14 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-postgres = ["psycopg[binary]"]
+# psycopg-binary is listed explicitly (not via the ``psycopg[binary]``
+# extra) because some pip resolutions on Python 3.13 / Windows have
+# been observed to install only ``psycopg`` core without the binary
+# backend, leaving ``import psycopg`` to fail at runtime with
+# "no pq wrapper available". Listing the package directly makes the
+# resolver fail loudly if no wheel is available rather than silently
+# producing a half-broken install.
+postgres = ["psycopg>=3.2", "psycopg-binary>=3.2"]
 docker = ["docker"]
 dev = [
     "pytest>=8.0",
@@ -25,12 +32,11 @@ dev = [
     "mypy>=1.8",
     "ruff>=0.4",
     "types-PyYAML",
-    # Pulled in via the [postgres] extra so a single ``pip install
-    # -e .[dev]`` gives you a fully-functional test environment that
-    # can exercise POSTGRES_TEST_URL-gated tests when the env var is
-    # set. Sims that don't need Postgres can stay on the runtime
-    # deps alone.
-    "psycopg[binary]",
+    # Same explicit pair so a single ``pip install -e .[dev]`` produces
+    # a test environment that can exercise POSTGRES_TEST_URL-gated
+    # tests when the env var is set.
+    "psycopg>=3.2",
+    "psycopg-binary>=3.2",
 ]
 
 [tool.hatch.build.targets.wheel]
