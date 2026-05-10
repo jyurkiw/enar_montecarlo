@@ -713,7 +713,7 @@ A minimal sim with:
 
 Total: 6 DB rows per iteration (4 effects, 2 resolutions; markers don't persist).
 
-### P7.2 End-to-end test (M)
+### P7.2 End-to-end test (M) — [x] Done
 
 **File:** `tests/integration/test_run_end_to_end.py`
 
