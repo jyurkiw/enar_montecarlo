@@ -551,7 +551,7 @@ The framework imports `HaltException` from `enar_eventchain` (or, until that lib
 
 **Acceptance:** `python -m enar_montecarlo --help` lists all subcommands. Same when invoked through a sim's `__main__`.
 
-### P4.2 `run` subcommand (M)
+### P4.2 `run` subcommand (M) — [x] Done
 
 **Module:** `src/enar_montecarlo/cli/commands/run.py`
 
