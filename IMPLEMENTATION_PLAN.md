@@ -543,7 +543,7 @@ The framework imports `HaltException` from `enar_eventchain` (or, until that lib
 
 **Goal:** All subcommands working against the lifecycle driver. Sim authors can `python -m my_sim run a.yaml d.yaml` and get a UUID.
 
-### P4.1 CLI scaffold (S)
+### P4.1 CLI scaffold (S) — [x] Done
 
 **Module:** `src/enar_montecarlo/cli/main.py`
 
