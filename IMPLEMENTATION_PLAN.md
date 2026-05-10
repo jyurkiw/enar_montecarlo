@@ -563,7 +563,7 @@ Flags per `DESIGN §10.1`. Builds `RunArgs`, calls `execute_run`, prints UUID to
 - `--iterations 3 --quiet` runs silent
 - Unknown args go into `extra_args`
 
-### P4.3 `template` subcommand (S)
+### P4.3 `template` subcommand (S) — [x] Done
 
 **Module:** `src/enar_montecarlo/cli/commands/template.py`
 
